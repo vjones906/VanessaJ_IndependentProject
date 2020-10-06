@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJump : MonoBehaviour
+public class FakePlatform : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -20,8 +20,7 @@ public class PlayerJump : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<Rigidbody2D>().velocity.y <= 0)
         {
-            collision.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector3.up * 600f);
+            collision.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector3.up * 0f);
         }
-
     }
 }
