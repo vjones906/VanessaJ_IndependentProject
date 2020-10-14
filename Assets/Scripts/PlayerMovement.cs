@@ -13,10 +13,21 @@ public class PlayerMovement : MonoBehaviour
     public Text scoreText;
     private float topScore = 0f;
 
+    private EventManager eventManager;
+
+    public bool gameOver;
+    public bool isActive;
+
+    public GameObject fakePrefab;
+
     // Start is called before the first frame update
     void Start()
     {
+        eventManager = GameObject.Find("EventManager").GetComponent<EventManager>();
         playerRB2D = GetComponent<Rigidbody2D>();
+
+        gameOver = false;
+        isActive = true;
     }
 
     void Update()
@@ -36,16 +47,40 @@ public class PlayerMovement : MonoBehaviour
         playerRB2D.velocity = new Vector2(movementInput * speed, playerRB2D.velocity.y);
 
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, -39, 39), transform.position.y);
+
+        if (movementInput < 0)
+        {
+            this.GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else
+        {
+            this.GetComponent<SpriteRenderer>().flipX = true;
+        }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void Deactivate()
     {
-        if(player.gameObject.GetComponent<Rigidbody2D>().velocity.y <= 0)
+        isActive = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (playerRB2D.velocity.y <= 0)
         {
-            if (collision.gameObject.name.StartsWith("Fake"))
+            if (collision.gameObject.CompareTag("PlatformFake"))
             {
                 Destroy(collision.gameObject);
+                Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (45 + Random.Range(0.2f, 5.0f))), Quaternion.identity);
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Destroyer"))
+        {
+            Debug.Log("Game Over");
+            //eventManager.gameOverEvent?.Invoke();
         }
     }
 }

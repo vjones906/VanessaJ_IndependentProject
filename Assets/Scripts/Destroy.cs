@@ -8,57 +8,55 @@ public class Destroy : MonoBehaviour
     public GameObject platformPrefab;
     public GameObject boostPrefab;
     public GameObject fakePrefab;
-    private GameObject newPlatform;
+    //private GameObject newPlatform;
 
-    // Start is called before the first frame update
+    //private EventManager eventManager;
+
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //eventManager = GameObject.Find("EventManager").GetComponent<EventManager>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name.StartsWith("Platform"))
+        if (collision.gameObject.CompareTag("PlatformNormal"))
         {
             if(Random.Range(1, 7) == 1)
             {
                 Destroy(collision.gameObject);
-                Instantiate(boostPrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (25 + Random.Range(0.2f, 1.0f))), Quaternion.identity);
+                Instantiate(boostPrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 1.0f))), Quaternion.identity);
             }
             else
             {
-                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (25 + Random.Range(0.2f, 1.0f)));
+                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 1.0f)));
             }
         }
-        else if(collision.gameObject.name.StartsWith("Boost"))
+        else if(collision.gameObject.CompareTag("PlatformBoost"))
         {
             if (Random.Range(1, 7) == 1)
             {
-                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (25 + Random.Range(0.2f, 1.0f)));
+                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 1.0f)));
             }
             else
             {
                 Destroy(collision.gameObject);
-                Instantiate(platformPrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (25 + Random.Range(0.2f, 1.0f))), Quaternion.identity);
+                Instantiate(platformPrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 1.0f))), Quaternion.identity);
             }
         }
-        else if (collision.gameObject.name.StartsWith("Fake"))
+        else if (collision.gameObject.CompareTag("PlatformFake"))
         {
-            if (Random.Range(1, 7) == 1)
-            {
-                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (25 + Random.Range(0.2f, 1.0f)));
-            }
-            else
-            {
-                Destroy(collision.gameObject);
-                Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (25 + Random.Range(0.2f, 1.0f))), Quaternion.identity);
-            }
+            Destroy(collision.gameObject);
+            Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 5.0f))), Quaternion.identity);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(collision.gameObject);
+            Debug.Log("Game Over");
+            //eventManager.gameOverEvent?.Invoke();
         }
     }
 }
