@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, -39, 39), transform.position.y);
 
-        if (movementInput < 0)
+        if (movementInput < 0.1)
         {
             this.GetComponent<SpriteRenderer>().flipX = false;
         }
