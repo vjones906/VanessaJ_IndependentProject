@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,11 +21,18 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject fakePrefab;
 
+    private GameObject camera;
+    private float lowerBoundary;
+
+    public Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
+        camera = GameObject.Find("Main Camera");
         eventManager = GameObject.Find("EventManager").GetComponent<EventManager>();
         playerRB2D = GetComponent<Rigidbody2D>();
+        lowerBoundary = camera.transform.position.y - 30;
 
         gameOver = false;
         isActive = true;
@@ -32,12 +40,20 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if(playerRB2D.velocity.y > 0 && transform.position.y > topScore)
+        lowerBoundary = camera.transform.position.y - 30;
+
+        if (playerRB2D.velocity.y > 0 && transform.position.y > topScore)
         {
             topScore = transform.position.y / 8;
         }
 
         scoreText.text = "Score: " + Mathf.Round(topScore).ToString();
+
+        if (transform.position.y < lowerBoundary && gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Game Over");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
     }
 
     // Update is called once per frame
@@ -48,13 +64,22 @@ public class PlayerMovement : MonoBehaviour
 
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, -39, 39), transform.position.y);
 
-        if (movementInput < 0.1)
+        if (movementInput < 0)
         {
             this.GetComponent<SpriteRenderer>().flipX = false;
         }
-        else
+        else if (movementInput > 0)
         {
             this.GetComponent<SpriteRenderer>().flipX = true;
+        }
+
+        if (playerRB2D.velocity.y > 0.1)
+        {
+            anim.SetBool("isJumping", true);
+        }
+        else
+        {
+            anim.SetBool("isJumping", false);
         }
     }
 
