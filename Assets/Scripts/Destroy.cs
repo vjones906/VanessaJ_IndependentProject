@@ -48,6 +48,16 @@ public class Destroy : MonoBehaviour
             Destroy(collision.gameObject);
             Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 5.0f))), Quaternion.identity);
         }
+        else if (collision.gameObject.CompareTag("PlatformEnemy"))
+        {
+            Destroy(collision.gameObject);
+            
+        }
+        else if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(collision.gameObject);
+
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

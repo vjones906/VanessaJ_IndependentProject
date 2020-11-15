@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Text scoreText;
     private float topScore = 0f;
+    public float appleScore;
 
     private EventManager eventManager;
 
@@ -44,14 +45,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerRB2D.velocity.y > 0 && transform.position.y > topScore)
         {
-            topScore = transform.position.y / 8;
+            topScore = (transform.position.y / 10) + appleScore;
         }
 
         scoreText.text = "Score: " + Mathf.Round(topScore).ToString();
 
         if (transform.position.y < lowerBoundary && gameObject.CompareTag("Player"))
         {
-            Debug.Log("Game Over");
+            Debug.Log("Game Over normal");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
@@ -59,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        appleScore = GameObject.FindWithTag("Apple").GetComponent<Apple>().appleScore;
+
         movementInput = Input.GetAxis("Horizontal");
         playerRB2D.velocity = new Vector2(movementInput * speed, playerRB2D.velocity.y);
 
@@ -107,5 +110,6 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Game Over");
             //eventManager.gameOverEvent?.Invoke();
         }
+        
     }
 }

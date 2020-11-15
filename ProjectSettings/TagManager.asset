@@ -8,6 +8,10 @@ TagManager:
   - PlatformNormal
   - PlatformBoost
   - PlatformFake
+  - Enemy
+  - PlatformEnemy
+  - Apple
+  - GroupEnemy
   layers:
   - Default
   - TransparentFX
