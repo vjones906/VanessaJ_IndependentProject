@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class BoostJump : MonoBehaviour
 {
+    private AudioSource audioSource;
+    public AudioClip jumpSound;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -21,6 +24,7 @@ public class BoostJump : MonoBehaviour
         if (collision.gameObject.GetComponent<Rigidbody2D>().velocity.y <= 0)
         {
             collision.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector3.up * 1000f);
+            audioSource.PlayOneShot(jumpSound, 0.75f);
         }
 
     }

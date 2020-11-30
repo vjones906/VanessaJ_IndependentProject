@@ -27,6 +27,10 @@ public class PlayerMovement : MonoBehaviour
 
     public Animator anim;
 
+    private AudioSource audioSource;
+    public AudioClip ripSound;
+    public AudioClip appleSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
 
         gameOver = false;
         isActive = true;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -93,10 +99,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.CompareTag("Apple"))
+        {
+            audioSource.PlayOneShot(appleSound, 0.75f);
+        }
+
         if (playerRB2D.velocity.y <= 0)
         {
             if (collision.gameObject.CompareTag("PlatformFake"))
             {
+                audioSource.PlayOneShot(ripSound, 0.75f);
                 Destroy(collision.gameObject);
                 Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (45 + Random.Range(0.2f, 5.0f))), Quaternion.identity);
             }
