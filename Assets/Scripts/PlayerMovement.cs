@@ -13,7 +13,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Text scoreText;
     private float topScore = 0f;
-    public float appleScore;
+    public float appleScore = 0f;
+    public float fakePlatScore = 0f;
 
     private EventManager eventManager;
 
@@ -31,6 +32,10 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip ripSound;
     public AudioClip appleSound;
 
+    Material material;
+    bool isDissolving = false;
+    float fade = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,15 +48,32 @@ public class PlayerMovement : MonoBehaviour
         isActive = true;
 
         audioSource = GetComponent<AudioSource>();
+
+        material = GetComponent<SpriteRenderer>().material;
+
+        isDissolving = true;
     }
 
     void Update()
     {
+        if (isDissolving)
+        {
+            fade += Time.deltaTime;
+
+            if (fade >= 1f)
+            {
+                fade = 1f;
+                isDissolving = false;
+            }
+        }
+
+        material.SetFloat("_Fade", fade);
+
         lowerBoundary = camera.transform.position.y - 30;
 
         if (playerRB2D.velocity.y > 0 && transform.position.y > topScore)
         {
-            topScore = (transform.position.y / 10) + appleScore;
+            topScore = (transform.position.y / 10) + appleScore + fakePlatScore;
         }
 
         scoreText.text = "Score: " + Mathf.Round(topScore).ToString();
@@ -66,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        appleScore = GameObject.FindWithTag("Apple").GetComponent<Apple>().appleScore;
+        //appleScore = GameObject.FindWithTag("Apple").GetComponent<Apple>().appleScore;
 
         movementInput = Input.GetAxis("Horizontal");
         playerRB2D.velocity = new Vector2(movementInput * speed, playerRB2D.velocity.y);
@@ -102,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Apple"))
         {
             audioSource.PlayOneShot(appleSound, 0.75f);
+            appleScore += 50;
         }
 
         if (playerRB2D.velocity.y <= 0)
@@ -110,7 +133,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 audioSource.PlayOneShot(ripSound, 0.75f);
                 Destroy(collision.gameObject);
-                Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (45 + Random.Range(0.2f, 5.0f))), Quaternion.identity);
+                fakePlatScore -= 5;
+                Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (45 + Random.Range(0.75f, 5.0f))), Quaternion.identity);
             }
         }
     }

@@ -24,29 +24,29 @@ public class Destroy : MonoBehaviour
             if(Random.Range(1, 7) == 1)
             {
                 Destroy(collision.gameObject);
-                Instantiate(boostPrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 1.0f))), Quaternion.identity);
+                Instantiate(boostPrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.75f, 1.0f))), Quaternion.identity);
             }
             else
             {
-                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 1.0f)));
+                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.75f, 1.0f)));
             }
         }
         else if(collision.gameObject.CompareTag("PlatformBoost"))
         {
             if (Random.Range(1, 7) == 1)
             {
-                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 1.0f)));
+                collision.gameObject.transform.position = new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.75f, 1.0f)));
             }
             else
             {
                 Destroy(collision.gameObject);
-                Instantiate(platformPrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 1.0f))), Quaternion.identity);
+                Instantiate(platformPrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.75f, 1.0f))), Quaternion.identity);
             }
         }
         else if (collision.gameObject.CompareTag("PlatformFake"))
         {
             Destroy(collision.gameObject);
-            Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.2f, 5.0f))), Quaternion.identity);
+            Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (35 + Random.Range(0.75f, 5.0f))), Quaternion.identity);
         }
         else if (collision.gameObject.CompareTag("PlatformEnemy"))
         {
