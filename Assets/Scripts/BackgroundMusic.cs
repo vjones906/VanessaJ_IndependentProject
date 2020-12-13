@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class BackgroundMusic : MonoBehaviour
 {
+    AudioSource audioSource;
+
     private static BackgroundMusic instance = null;
     public static BackgroundMusic Instance
     {
         get { return instance; }
+    }
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Awake()
@@ -29,5 +36,11 @@ public class BackgroundMusic : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void AdjustVolume(float level)
+    {
+        audioSource.volume = level;
+        PlayerPrefs.SetFloat("VolumeLevel", level);
     }
 }

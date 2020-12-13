@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Text scoreText;
     private float topScore = 0f;
+    private float overallScore = 0f;
     public float appleScore = 0f;
     public float fakePlatScore = 0f;
 
@@ -73,16 +74,21 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerRB2D.velocity.y > 0 && transform.position.y > topScore)
         {
-            topScore = (transform.position.y / 10) + appleScore + fakePlatScore;
+            topScore = (transform.position.y / 10);
         }
 
-        scoreText.text = "Score: " + Mathf.Round(topScore).ToString();
+        scoreText.text = "Score: " + Mathf.Round(topScore + overallScore).ToString();
 
         if (transform.position.y < lowerBoundary && gameObject.CompareTag("Player"))
         {
             Debug.Log("Game Over normal");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
+    }
+
+    public void UpdateScore(float Addition)
+    {
+        overallScore += Addition;
     }
 
     // Update is called once per frame
@@ -119,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
         isActive = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    /*private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Apple"))
         {
@@ -137,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
                 Instantiate(fakePrefab, new Vector2(Random.Range(-35f, 35f), player.transform.position.y + (45 + Random.Range(0.75f, 5.0f))), Quaternion.identity);
             }
         }
-    }
+    }*/
 
     private void OnCollisionEnter(Collision collision)
     {
